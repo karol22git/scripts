@@ -45,8 +45,7 @@ for my $i (0..$rows_a-1) {
 #my $cols = scalar @{ $matrix_a[0] };
 #my $rows = scalar @matrix_b;
 #my $rows_a = scalar @matrix_a;
-#for my $i (0..$rows_a-1) {
-#    my @row = ();
+#for my $i (0..$rows_a-1) {zz
 #    my $r = 0;
 #    for my $j (0..$cols-1) {
 #        for my $k (0..$cols-1) {
@@ -67,9 +66,9 @@ for my $i (0..$rows_c-1) {
     print $plik "\n";
 }
 close $plik or warn "Problem przy zamykaniu pliku: $!";
-for my $i (0..$rows_c-1) {
-    for my $j (0..$cols_c-1) {
-        printf "%8.3f ",$matrix_c[$i][$j] ;
-    }
-    print "\n";
-}
+#for my $i (0..$rows_c-1) {
+#    for my $j (0..$cols_c-1) {
+#        printf "%8.3f ",$matrix_c[$i][$j] ;
+#    }
+#    print "\n";
+#}
