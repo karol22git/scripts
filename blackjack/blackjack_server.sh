@@ -1,28 +1,29 @@
 #!/bin/bash
-pid_file="game_metadata"
-game_status="game_status"
-players="players"
-max_players=3
-game_metadata="game_metadata"
-start_game="start_game"
-croupier_hand="croupier_hand"
+source utilities.sh
+real_game_metadata="REAL_GAME_METADATA"
 handler_name="communication_handler.sh"
+MAX_PLAYERS=2
 setup_server() {
     server_port=$1
-    echo $$ > "$pid_file"
+    set_croupier "$$"
+    init_game
+    set_game_pid "$$"
+    generate_deck
+    set_game_status_zero
+    set_maximum_players "$MAX_PLAYERS"
+    set_current_players "1"
+    append_to_block "players" "$$"
     socat TCP-LISTEN:"$server_port",reuseaddr,fork SYSTEM:"bash $handler_name $server_port" &
     socat_pid=$!
 }
 
 cleanup() {
+    if [[ -f "$real_game_metadata" ]]; then
+        cp "$real_game_metadata" memory_dumb
+    fi
+    rm -f deck.txt
+    rm -f "$real_game_metadata"
     kill $socat_pid 2>/dev/null
-    pkill -f "$handler_name" 2>/dev/null
-    rm -f "$pid_file"
-    while read -r f; do rm -f "$f"; done < "$players"
-    rm -f "$players"
-    rm -f "$game_status"
-    rm -f "$start_game"
-    rm -f "$croupier_hand"
     exit 0
 }
 if [[ $# -ne 1 ]]; then
